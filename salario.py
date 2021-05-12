@@ -1,15 +1,18 @@
-while True:
-    
-    try:
-        Salario_bruto = float(input("Informe seu salario bruto com os centavos R$"))
-        Dependentes = int(input("informe o numero de dependentes "))
-        if not float and int :
-            raise ValueError()
-    except ValueError:
-        print("Valor não permitido, coloque apenas numeros!")
-    
-    else:
-        break
+def inicio():  
+    while True:
+        
+        try:
+            Salario_bruto = float(input("Informe seu salario bruto com os centavos R$"))
+            Dependentes = int(input("informe o numero de dependentes "))
+            if not float and int :
+                raise ValueError()
+        except ValueError:
+            print("Valor não permitido, coloque apenas numeros!")
+            
+        else:
+            break
+                
+            
 
     if Salario_bruto <= 1100.00:
         reajuste = Salario_bruto/100 * 7.5
@@ -25,12 +28,12 @@ while True:
 
     else:
         reajuste = (Salario_bruto*14/100) - 141.05    
-        
-        
-        
+            
+            
+            
     if Salario_bruto <= 1903.98:
         reajuste_irrf = 0
-        
+            
     elif (Salario_bruto >= 1903.99) and (Salario_bruto <= 2826.65):
         reajuste_irrf = (Salario_bruto*7.5/100)- 142.80    
 
@@ -42,18 +45,34 @@ while True:
 
     else:
         reajuste_irrf = (Salario_bruto*27.5/100)- 869.36
-        
+            
     Valor_dependentes = Dependentes * 189.59
 
     valor_final = Salario_bruto - (reajuste + reajuste_irrf)
-        
+            
     print(f"""
-    Salario bruto é de: {Salario_bruto:,.2f}
-    Valor do desconto INSS: {reajuste:,.2f}
-    Valor do desconto IRRF: {reajuste_irrf:,.2f}
-    Valor do desconto por Dependentes: {Valor_dependentes:,.2f}
-    Valor total dos descontos: {reajuste + reajuste_irrf:,.2f}
-    Salario liquido com desconto INSS e IRRF: {valor_final + Valor_dependentes:,.2f}
-    """)
+        Salario bruto é de: {Salario_bruto:,.2f}
+        Valor do desconto INSS: {reajuste:,.2f}
+        Valor do desconto IRRF: {reajuste_irrf:,.2f}
+        Valor do desconto por Dependentes: {Valor_dependentes:,.2f}
+        Valor total dos descontos: {reajuste + reajuste_irrf:,.2f}
+        Salario liquido com desconto INSS e IRRF: {valor_final + Valor_dependentes:,.2f}
+        """)
 
+while True:
+    
+    try:
+        continuar = int(input("Informe 1 continuar ou 2 para finalizar: \n"))
+        if not int or ( continuar < 1 or continuar > 2):
+             raise ValueError()
+    except ValueError:
+        print("Valor inválido")
+    
+    if continuar == 1:
+        inicio()
+    
+    elif continuar == 2:
+        print("finalizado")
+        break
+        
 
