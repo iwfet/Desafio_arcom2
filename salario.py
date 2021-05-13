@@ -1,13 +1,30 @@
-def inicio():  
+dado = False
+
+while True:
+    while dado == True:
+        try:
+            continuar = int(input("\033[33m Informe 1 continuar ou 2 para finalizar: "))
+            if not int or ( continuar < 1 or continuar > 2):
+                raise ValueError("\033[31m Valor inválido!sd")
+        except ValueError:
+            print("\033[31m Valor inválido!")
+            continue
+        if continuar ==1:
+            break
+        
+        elif continuar == 2:
+            print("\033[33m Encerrando...")
+            quit()
+        
     while True:
         
         try:
-            Salario_bruto = float(input("Informe seu salario bruto com os centavos R$"))
-            Dependentes = int(input("informe o numero de dependentes "))
+            Salario_bruto = float(input("\033[33m Informe seu salario bruto com os centavos R$"))
+            Dependentes = int(input("\033[33m Informe o numero de dependentes: "))
             if not float and int :
                 raise ValueError()
         except ValueError:
-            print("Valor não permitido, coloque apenas numeros!")
+            print("\033[31m Valor não permitido, coloque apenas numeros!")
             
         else:
             break
@@ -51,28 +68,16 @@ def inicio():
     valor_final = Salario_bruto - (reajuste + reajuste_irrf)
             
     print(f"""
-        Salario bruto é de: {Salario_bruto:,.2f}
+        \033[36mSalario bruto é de: {Salario_bruto:,.2f}
         Valor do desconto INSS: {reajuste:,.2f}
         Valor do desconto IRRF: {reajuste_irrf:,.2f}
         Valor do desconto por Dependentes: {Valor_dependentes:,.2f}
         Valor total dos descontos: {reajuste + reajuste_irrf:,.2f}
-        Salario liquido com desconto INSS e IRRF: {valor_final + Valor_dependentes:,.2f}
+        Salario liquido com desconto INSS e IRRF: {valor_final - Valor_dependentes:,.2f}
         """)
+    dado = True
 
-while True:
-    
-    try:
-        continuar = int(input("Informe 1 continuar ou 2 para finalizar: \n"))
-        if not int or ( continuar < 1 or continuar > 2):
-             raise ValueError()
-    except ValueError:
-        print("Valor inválido")
-    
-    if continuar == 1:
-        inicio()
-    
-    elif continuar == 2:
-        print("finalizado")
-        break
-        
 
+
+    
+ 
