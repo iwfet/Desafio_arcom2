@@ -1,24 +1,8 @@
-''' Bibliotecas 
-    pip install pandas
-    pip install openpyxl
-    pip install tk
-    '''
 import pandas as pd
-import openpyxl
-caminho = 'C:/Users/j13vv/Downloads/salario.xls'
-wo
 
 
+ler = pd.read_excel ('C:/Desenvolvimento/python/salario.xls')
 
-
-
-
-
-
-
-
-Salario_bruto =1100 
-Dependentes = 0 
           
 def DescontoINSS_IRRF():    
     if Salario_bruto <= 1100.00:
@@ -56,17 +40,32 @@ def DescontoINSS_IRRF():
         reajuste_irrf = (salarioBase*27.5/100)- 869.36          
     
     
-    valor_final = Salario_bruto - (reajuste + reajuste_irrf)
+    valor_final = Salario_bruto - Descontos -(reajuste - reajuste_irrf)
     return reajuste,reajuste_irrf, valor_final, Valor_dependentes,valor_final
 
+for index, linha in ler.iterrows():
+    id = linha["Matricula"]
+    nome = linha["Nome"]
+    Dependentes = linha["Dependentes"]
+    Descontos = linha["Desconto"]
+    Salario_bruto = linha["Salario"]
     
-reajuste,reajuste_irrf, valor_final, Valor_dependentes,valor_final = DescontoINSS_IRRF()   
-       
-print(f"""
-\033[36mSalario bruto é de: {Salario_bruto:,.2f}
-Valor do desconto INSS: {reajuste:,.2f}
-Valor do desconto IRRF: {reajuste_irrf:,.2f}
-Valor do desconto por Dependentes: {Valor_dependentes:,.2f}
-Valor total dos descontos: {reajuste + reajuste_irrf:,.2f}
-Salario liquido com desconto INSS e IRRF: {valor_final :,.2f}
-""")
+    reajuste,reajuste_irrf, valor_final, Valor_dependentes,valor_final = DescontoINSS_IRRF()
+    
+    print(f"""
+    \033[36mSalario bruto é de: {Salario_bruto:,.2f}
+    Numero de matricula {id}
+    Outros descontos {Descontos}
+    Valor do desconto INSS: {reajuste:,.2f}
+    Valor do desconto IRRF: {reajuste_irrf:,.2f}
+    Valor do desconto por Dependentes: {Valor_dependentes:,.2f}
+    Valor total dos descontos: {reajuste + reajuste_irrf:,.2f}
+    Salario liquido com desconto INSS e IRRF: {valor_final :,.2f}
+    """)       
+   
+   
+   
+   
+   
+   
+   
