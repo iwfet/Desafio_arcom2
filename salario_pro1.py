@@ -2,15 +2,13 @@
     pip install pandas
     pip install openpyxl
     pip install tk
-
-
+    '''
 import pandas as pd
-
+import openpyxl
 caminho = 'C:/Users/j13vv/Downloads/salario.xls'
-x = pd.read_excel(caminho)
+wo
 
-print(x['Matricula'] [:])
-'''
+
 
 
 
@@ -22,7 +20,7 @@ print(x['Matricula'] [:])
 Salario_bruto =1100 
 Dependentes = 0 
           
-def DescontoINSS():    
+def DescontoINSS_IRRF():    
     if Salario_bruto <= 1100.00:
         reajuste = Salario_bruto/100 * 7.5
 
@@ -41,11 +39,7 @@ def DescontoINSS():
     Valor_dependentes = Dependentes * 189.59 
     salarioBase = Salario_bruto - (reajuste + Valor_dependentes)
 
-    return reajuste, Valor_dependentes, salarioBase   
-    
-    
-      
-def DescontoIRRF():             
+            
     if salarioBase <= 1903.98:
         reajuste_irrf = 0
             
@@ -63,11 +57,10 @@ def DescontoIRRF():
     
     
     valor_final = Salario_bruto - (reajuste + reajuste_irrf)
-    return reajuste_irrf, valor_final
+    return reajuste,reajuste_irrf, valor_final, Valor_dependentes,valor_final
 
     
-reajuste, Valor_dependentes, salarioBase = DescontoINSS()
-reajuste_irrf, valor_final = DescontoIRRF()    
+reajuste,reajuste_irrf, valor_final, Valor_dependentes,valor_final = DescontoINSS_IRRF()   
        
 print(f"""
 \033[36mSalario bruto é de: {Salario_bruto:,.2f}
