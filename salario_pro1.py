@@ -1,9 +1,29 @@
+import tkinter as tk
+from tkinter import Canvas, filedialog
 import pandas as pd
 import numpy  as np
 from openpyxl import *
 
-ler = pd.read_excel ('C:/Users/j13vv/Downloads/salario.xls')
+root = tk.Tk()
+
+Canvas1 = tk.Canvas(root, width= 300, height= 300, bg='lightsteelblue')
+Canvas1.pack()
+#ler = pd.read_excel ('C:/Desenvolvimento/python/salario.xls')
 valor_salario_liquido = []
+
+ler = 0
+def getExcel():
+    global ler
+    import_file_path = filedialog.askopenfilename()
+    ler = pd.read_excel(import_file_path)
+    
+browseButton_excel = tk.Button(
+    text="importe excel file",
+    command=getExcel,
+    bg='green', fg='white', font=('helvetica', 12, 'bold'))
+Canvas1.create_window(150,150, window=browseButton_excel)
+
+
           
 def DescontoINSS_IRRF():    
     if Salario_bruto <= 1100.00:
@@ -41,7 +61,7 @@ def DescontoINSS_IRRF():
         reajuste_irrf = (salarioBase*27.5/100)- 869.36          
     
     
-    valor_final = Salario_bruto - Descontos -(reajuste - reajuste_irrf)
+    valor_final = Salario_bruto - Descontos -(reajuste + reajuste_irrf)
     return valor_final
 
 for index, linha in ler.iterrows():
@@ -60,3 +80,6 @@ ler.to_excel(writer,'new_sheet')
 writer.save()
 
 print(ler)
+
+
+root.mainloop()
