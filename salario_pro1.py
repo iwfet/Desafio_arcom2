@@ -42,20 +42,17 @@ def DescontoINSS_IRRF():
     
     
     valor_final = Salario_bruto - Descontos -(reajuste - reajuste_irrf)
-    return reajuste,reajuste_irrf, valor_final, Valor_dependentes,valor_final
+    return valor_final
 
 for index, linha in ler.iterrows():
     id = linha["Matricula"]
     nome = linha["Nome"]
     Dependentes = linha["Dependentes"]
     Descontos = linha["Desconto"]
-    Salario_bruto = linha["Salario"]  
-
-    reajuste,reajuste_irrf, valor_final, Valor_dependentes,valor_final = DescontoINSS_IRRF()
-
-    valor_salario_liquido.append(valor_final) 
+    Salario_bruto = linha["Salario"]
+    valor_final = DescontoINSS_IRRF()
+    valor_salario_liquido.append(f'''{valor_final:,.2f}''')
 
 ler['Salario Descontado'] = valor_salario_liquido
 
 print(ler)
-    
