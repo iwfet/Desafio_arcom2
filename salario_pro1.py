@@ -55,4 +55,8 @@ for index, linha in ler.iterrows():
 
 ler['Salario Descontado'] = valor_salario_liquido
 
+writer = pd.ExcelWriter('salario_com_os_descontos.xlsx')
+ler.to_excel(writer,'new_sheet')
+writer.save()
+
 print(ler)
