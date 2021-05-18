@@ -1,9 +1,34 @@
+import tkinter as tk
+from tkinter import Canvas, filedialog
 import pandas as pd
 import numpy  as np
 from openpyxl import *
 
-ler = pd.read_excel ('C:/Desenvolvimento/python/salario.xls')
+root = tk.Tk()
+
+Canvas1 = tk.Canvas(root, width= 300, height= 300, bg='lightsteelblue')
+Canvas1.pack()
+#ler = pd.read_excel ('C:/Desenvolvimento/python/salario.xls')
 valor_salario_liquido = []
+
+ler = 0
+def getExcel():
+    global ler
+    import_file_path = filedialog.askopenfilename()
+    ler = pd.read_excel(import_file_path)
+    
+browseButton_excel = tk.Button(
+    text="importe excel file",
+    command=getExcel,
+    bg='green', fg='white', font=('helvetica', 12, 'bold'))
+Canvas1.create_window(150,150, window=browseButton_excel)
+
+root.mainloop()
+
+valor_salario_liquido = []
+valor_desconto_inss = []
+valor_desconto_irrf = []
+
           
 def DescontoINSS(salarioBruto):    
     if salarioBruto <= 1100.00:
@@ -21,7 +46,7 @@ def DescontoINSS(salarioBruto):
     else :
         reajuste = 713.10 - 141.05           
        
-    print(reajuste)
+    
     return reajuste 
     
 
@@ -43,7 +68,7 @@ def DescontoIRRF(salariobruto,desc,dep):
 
     else:
         reajuste_irrf = (salariobase*27.5/100)- 869.36   
-    print(reajuste_irrf)       
+          
       
     return reajuste_irrf
 
@@ -57,11 +82,15 @@ for index, linha in ler.iterrows():
     
     desconto_inss = DescontoINSS(Salario_bruto)
     desconto_irrf = DescontoIRRF(Salario_bruto,desconto_inss,Dependentes)
-    valor_final = Salario_bruto - desconto_irrf- desconto_inss
+    valor_final = Salario_bruto - desconto_irrf - Descontos- desconto_inss
     
     valor_salario_liquido.append(f'''{valor_final:,.2f}''')
+    valor_desconto_inss.append(f'''{desconto_inss:,.2f}''')
+    valor_desconto_irrf.append(f'''{desconto_irrf:,.2f}''')
 
-ler['Salario Descontado'] = valor_salario_liquido
+ler['Salario aplicado descontos'] = valor_salario_liquido
+ler['Desconto do inss'] = valor_desconto_inss
+ler['Desconto do irrf'] =  valor_desconto_irrf
 
 writer = pd.ExcelWriter('salario_com_os_descontos.xlsx')
 ler.to_excel(writer,'new_sheet')
