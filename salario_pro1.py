@@ -48,7 +48,7 @@ def DescontoINSS(salarioBruto):
         reajuste = (salarioBruto*14/100) - 141.05    
 
     else :
-        reajuste = 713.10 - 141.05           
+        reajuste = 713.10           
        
     
     return reajuste 
@@ -56,7 +56,7 @@ def DescontoINSS(salarioBruto):
 
 def DescontoIRRF(salariobruto,desc,dep):
     
-    salariobase = salariobruto - desc - (dep * 189.59)
+    salariobase = salariobruto - (desc + (dep * 189.59))
              
     if salariobase <= 1903.98:
         reajuste_irrf = 0
