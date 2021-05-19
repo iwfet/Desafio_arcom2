@@ -1,8 +1,10 @@
+import time
 import tkinter as tk
 from tkinter import Canvas, filedialog
 import pandas as pd
 import numpy  as np
 from openpyxl import *
+
 
 
 valor_salario_liquido = []
@@ -21,6 +23,7 @@ def getExcel():
     global ler
     import_file_path = filedialog.askopenfilename()
     ler = pd.read_excel(import_file_path)
+    root.quit()
     
 browseButton_excel = tk.Button(
     text="importe excel file",
@@ -28,16 +31,6 @@ browseButton_excel = tk.Button(
     bg='green', fg='white', font=('helvetica', 12, 'bold'))
 Canvas1.create_window(150,150, window=browseButton_excel)
 
-def fechar():
-    global fechando
-
-    root.quit()
-
-browseButton_excel = tk.Button(
-    text= 'Gerar arquivo',
-    command= fechar,
-    bg= 'red', fg = 'white', font=('helvetica', 12, 'bold'))
-Canvas1.create_window(150, 200, window=browseButton_excel)
 
 root.mainloop()
           
@@ -107,4 +100,3 @@ writer = pd.ExcelWriter('salario_com_os_descontos.xlsx')
 ler.to_excel(writer,'new_sheet')
 writer.save()
 
-print(ler)
