@@ -1,9 +1,13 @@
 import tkinter as tk
 from tkinter import Canvas, filedialog
-from tkinter import font
 import pandas as pd
 import numpy  as np
 from openpyxl import *
+
+
+valor_salario_liquido = []
+valor_desconto_inss = []
+valor_desconto_irrf = []
 
 root = tk.Tk()
 
@@ -12,8 +16,6 @@ Canvas1.pack()
 #ler = pd.read_excel ('C:/Desenvolvimento/python/salario.xls')
 valor_salario_liquido = []
 
-fechando = False
-
 ler = 0
 def getExcel():
     global ler
@@ -21,7 +23,7 @@ def getExcel():
     ler = pd.read_excel(import_file_path)
     
 browseButton_excel = tk.Button(
-    text="Selecionar arquivo Excel",
+    text="importe excel file",
     command=getExcel,
     bg='green', fg='white', font=('helvetica', 12, 'bold'))
 Canvas1.create_window(150,150, window=browseButton_excel)
@@ -37,62 +39,50 @@ browseButton_excel = tk.Button(
     bg= 'red', fg = 'white', font=('helvetica', 12, 'bold'))
 Canvas1.create_window(150, 200, window=browseButton_excel)
 
-
 root.mainloop()
+          
+def DescontoINSS(salarioBruto):    
+    if salarioBruto <= 1100.00:
+        reajuste = salarioBruto/100*7.5
 
-def DescontoINSS(Salario_bruto):    
-    
-    global reajuste
-    
-    if Salario_bruto <= 1100.00:
-        reajuste = Salario_bruto/100 * 7.5
+    elif (salarioBruto >= 1100.01) and(salarioBruto <= 2203.48):
+        reajuste = (salarioBruto*9/100)- 16.65    
 
-    elif (Salario_bruto >= 1100.01) and(Salario_bruto <= 2203.48):
-        reajuste = (Salario_bruto*9/100)- 16.65    
+    elif (salarioBruto >= 2203.49 ) and (salarioBruto <= 3305.22):
+        reajuste = (salarioBruto*12/100) - 78.36    
 
-    elif (Salario_bruto >= 2203.49 ) and (Salario_bruto <= 3305.22):
-        reajuste = (Salario_bruto*12/100) - 78.36    
+    elif (salarioBruto >= 3305.23) and (salarioBruto <= 6433.57):
+        reajuste = (salarioBruto*14/100) - 141.05    
 
-    elif (Salario_bruto >= 3305.23) and (Salario_bruto <= 6433.57):
-        reajuste = (Salario_bruto*14/100) - 141.05    
-
-    else:
+    else :
         reajuste = 713.10 - 141.05           
        
-    #print(reajuste)
     
-    return reajuste
-
-
-
-def descontoIRRF(Salario_bruto, reajuste):    
+    return reajuste 
     
-    global reajuste_irrf
 
-    global valor_final
+def DescontoIRRF(salariobruto,desc,dep):
     
-    if Salario_bruto <= 1903.98:
+    salariobase = salariobruto - desc - (dep * 189.59)
+             
+    if salariobase <= 1903.98:
         reajuste_irrf = 0
             
-    elif (Salario_bruto >= 1903.99) and (Salario_bruto <= 2826.65):
-        reajuste_irrf = (Salario_bruto*7.5/100)- 142.80    
+    elif (salariobase >= 1903.99) and (salariobase <= 2826.65):
+        reajuste_irrf = (salariobase*7.5/100)- 142.80    
 
-    elif (Salario_bruto >= 2826.66 ) and (Salario_bruto <= 3751.05):
-        reajuste_irrf = (Salario_bruto*15/100)- 354.80    
+    elif (salariobase >= 2826.66 ) and (salariobase <= 3751.05):
+        reajuste_irrf = (salariobase*15/100)- 354.80    
 
-    elif (Salario_bruto >= 3751.06) and (Salario_bruto <= 4664.68):
-        reajuste_irrf = (Salario_bruto*22.5/100)- 636.13    
+    elif (salariobase >= 3751.06) and (salariobase <= 4664.68):
+        reajuste_irrf = (salariobase*22.5/100)- 636.13    
 
     else:
-        reajuste_irrf = (Salario_bruto*27.5/100)- 869.36          
-    
-    
-    valor_final = Salario_bruto - reajuste - Dependentes * 189.59
+        reajuste_irrf = (salariobase*27.5/100)- 869.36   
+          
+      
+    return reajuste_irrf
 
-    #print(reajuste_irrf, ',' , valor_final)
-    
-
-    return valor_final, reajuste_irrf
 
 for index, linha in ler.iterrows():
     id = linha["Matricula"]
@@ -100,16 +90,18 @@ for index, linha in ler.iterrows():
     Dependentes = linha["Dependentes"]
     Descontos = linha["Desconto"]
     Salario_bruto = linha["Salario"]
-    DescontoINSS(Salario_bruto)
-    descontoIRRF(Salario_bruto, reajuste)
     
-    print_valor = valor_final - reajuste_irrf
+    desconto_inss = DescontoINSS(Salario_bruto)
+    desconto_irrf = DescontoIRRF(Salario_bruto,desconto_inss,Dependentes)
+    valor_final = Salario_bruto - desconto_irrf - Descontos- desconto_inss
+    
+    valor_salario_liquido.append(f'''{valor_final:,.2f}''')
+    valor_desconto_inss.append(f'''{desconto_inss:,.2f}''')
+    valor_desconto_irrf.append(f'''{desconto_irrf:,.2f}''')
 
-    valor_salario_liquido.append(f'''{print_valor:,.2f}''')
-    valor_final = Salario_bruto - Descontos - (reajuste + reajuste_irrf)
-
-
-ler['Salario Descontado'] = valor_salario_liquido
+ler['Salario aplicado descontos'] = valor_salario_liquido
+ler['Desconto do inss'] = valor_desconto_inss
+ler['Desconto do irrf'] =  valor_desconto_irrf
 
 writer = pd.ExcelWriter('salario_com_os_descontos.xlsx')
 ler.to_excel(writer,'new_sheet')
